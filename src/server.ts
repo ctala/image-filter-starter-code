@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
@@ -33,7 +33,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
+  app.get( "/", async ( req:Request, res:Response ) => {
     res.send("try GET /filteredimage?image_url={{}}")
   } );
   
@@ -41,7 +41,7 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
    * The filteredimage endpoint receives a image_url to downloaded it and process it locally, 
    * return it and then delete it.
    */
-  app.get( "/filteredimage", async ( req, res ) => {
+  app.get( "/filteredimage", async ( req:Request, res:Response ) => {
     
     //We validate that the request has query params and also that the image_url is set.
     if(!req.query||!req.query.image_url)
@@ -50,8 +50,8 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     }
     
     //We create the constant and then we get the resulting url for the local picture.
-    const image_url = req.query.image_url;
-    const filteredImage = await filterImageFromURL(image_url);
+    const image_url:string = req.query.image_url;
+    const filteredImage:string = await filterImageFromURL(image_url);
 
     //After finishing sending the file, we delete it.
     res.sendFile(filteredImage, () => {
